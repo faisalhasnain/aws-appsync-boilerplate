@@ -1,0 +1,20 @@
+{
+  "name": "aws-appsync-boilerplate",
+  "version": "1.0.0",
+  "description": "Develop AWS AppSync GraphQL API using Cloud Formation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blissful-cc/aws-appsync-boilerplate.git"
+  },
+  "keywords": [],
+  "author": "Faisal Hasnain <faisal.hasnain@icloud.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/blissful-cc/aws-appsync-boilerplate/issues"
+  },
+  "homepage": "https://github.com/blissful-cc/aws-appsync-boilerplate#readme"
+}
