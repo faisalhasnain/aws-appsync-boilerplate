@@ -1,0 +1,9 @@
+type Contact {
+  name: String!
+  email: String!
+  phone: String
+}
+
+type Query {
+  getContacts: [Contact!]!
+}
