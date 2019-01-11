@@ -1,0 +1,79 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Create AppSync API using DynamoDB Data sources  
+
+Parameters:
+  ApiName:
+    Type: String
+    Description: Name of the API - used to generate unique names for resources
+    MinLength: 3
+    MaxLength: 25
+    AllowedPattern: '^[a-zA-Z][a-zA-Z0-9\-]*$'
+  SchemaFile:
+    Type: String
+    Description: Name of GraphQL schema file
+    Default: schema.graphql
+Resources:
+  GraphQLApi:
+    Type: AWS::AppSync::GraphQLApi
+    Properties:
+      Name: !Sub ${ApiName}-graphql-api
+      AuthenticationType: API_KEY
+  GraphQLSchema:
+    Type: AWS::AppSync::GraphQLSchema
+    Properties:
+      ApiId: !GetAtt GraphQLApi.ApiId
+      DefinitionS3Location: !Ref SchemaFile
+  ContactsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub ${ApiName}-contacts
+      KeySchema:
+      - AttributeName: username
+        KeyType: HASH
+      AttributeDefinitions:
+      - AttributeName: username
+        AttributeType: S
+      BillingMode: PAY_PER_REQUEST
+  ApiRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - appsync.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Policies:
+      - PolicyName: !Sub ${ApiName}-dynamo-access
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:DeleteItem
+            - dynamodb:UpdateItem
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:BatchGetItem
+            - dynamodb:BatchWriteItem
+            Resource: !GetAtt: ContactsTable.Arn
+  LambdaDataSource:
+    Type: AWS::AppSync::DataSource
+    Properties:
+      Name: LambdaDataSource
+      Type: AMAZON_DYNAMODB
+      ServiceRoleArn: !GetAtt ApiRole.Arn
+      DynamoDBConfig:
+        AwsRegion: !Ref AWS::Region
+        TableName: !Ref ContactsTable
+      ApiId: !GetAtt GraphQLApi.ApiId
+Outputs:
+  GraphQLApiEndpoint:
+    Description: AppSync GraphQL Endpoint
+    Value: GraphQLApi.GraphQLUrl
+
