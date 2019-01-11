@@ -8,10 +8,6 @@ Parameters:
     MinLength: 3
     MaxLength: 25
     AllowedPattern: '^[a-zA-Z][a-zA-Z0-9\-]*$'
-  SchemaFile:
-    Type: String
-    Description: Name of GraphQL schema file
-    Default: schema.graphql
 Resources:
   GraphQLApi:
     Type: AWS::AppSync::GraphQLApi
@@ -22,7 +18,7 @@ Resources:
     Type: AWS::AppSync::GraphQLSchema
     Properties:
       ApiId: !GetAtt GraphQLApi.ApiId
-      DefinitionS3Location: !Ref SchemaFile
+      DefinitionS3Location: schema.graphql
   ContactsTable:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -61,7 +57,7 @@ Resources:
             - dynamodb:Scan
             - dynamodb:BatchGetItem
             - dynamodb:BatchWriteItem
-            Resource: !GetAtt: ContactsTable.Arn
+            Resource: !GetAtt ContactsTable.Arn
   LambdaDataSource:
     Type: AWS::AppSync::DataSource
     Properties:
