@@ -11,13 +11,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/blissful-cc/aws-appsync-boilerplate.git"
+    "url": "git+https://github.com/faisalhasnain/aws-appsync-boilerplate.git"
   },
   "keywords": [],
   "author": "Faisal Hasnain <faisal.hasnain@icloud.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/blissful-cc/aws-appsync-boilerplate/issues"
+    "url": "https://github.com/faisalhasnain/aws-appsync-boilerplate/issues"
   },
-  "homepage": "https://github.com/blissful-cc/aws-appsync-boilerplate#readme"
+  "homepage": "https://github.com/faisalhasnain/aws-appsync-boilerplate#readme"
 }
