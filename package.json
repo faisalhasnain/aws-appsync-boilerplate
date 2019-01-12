@@ -4,7 +4,8 @@
   "description": "Develop AWS AppSync GraphQL API using Cloud Formation",
   "main": "index.js",
   "scripts": {
-    "package": "aws cloudformation package --s3-bucket contacts-dev --template-file template.yml --output-template-file packaged-template.yml --profile faisal",
+    "initialize": "aws s3 mb s3://contacts-dev-codes  --profile faisal",
+    "package": "aws cloudformation package --s3-bucket contacts-dev-codes --template-file template.yml --output-template-file packaged-template.yml --profile faisal",
     "upload": "aws cloudformation deploy --stack-name contacts-dev --template-file packaged-template.yml --capabilities CAPABILITY_IAM --parameter-overrides ApiName=contacts-dev --profile faisal",
     "deploy": "npm run package && npm run upload"
   },

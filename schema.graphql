@@ -7,3 +7,7 @@ type Contact {
 type Query {
   getContacts: [Contact!]!
 }
+
+type Schema {
+	query: Query
+}
