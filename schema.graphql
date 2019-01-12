@@ -20,6 +20,6 @@ type Mutation {
 }
 
 type Schema {
-	query: Query
+  query: Query
   mutation: Mutation
 }
