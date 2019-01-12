@@ -1,5 +1,12 @@
 type Contact {
-  name: String!
+  username: String!
+  fullName: String!
+  email: String!
+  phone: String
+}
+
+input ContactInput {
+  fullName: String!
   email: String!
   phone: String
 }
@@ -8,6 +15,11 @@ type Query {
   getContacts: [Contact!]!
 }
 
+type Mutation {
+  addContact(username: String! contact: ContactInput!): Contact
+}
+
 type Schema {
 	query: Query
+  mutation: Mutation
 }

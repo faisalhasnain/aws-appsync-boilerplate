@@ -58,16 +58,35 @@ Resources:
             - dynamodb:BatchGetItem
             - dynamodb:BatchWriteItem
             Resource: !GetAtt ContactsTable.Arn
-  LambdaDataSource:
+  ContactsTableDataSource:
     Type: AWS::AppSync::DataSource
     Properties:
-      Name: LambdaDataSource
+      Name: ContactsTableDataSource
       Type: AMAZON_DYNAMODB
       ServiceRoleArn: !GetAtt ApiRole.Arn
       DynamoDBConfig:
         AwsRegion: !Ref AWS::Region
         TableName: !Ref ContactsTable
       ApiId: !GetAtt GraphQLApi.ApiId
+  QueryGetContactsResolver:
+    Type: AWS::AppSync::Resolver
+    Properties:
+      TypeName: Query
+      FieldName: getContacts
+      DataSourceName: !GetAtt ContactsTableDataSource.Name
+      RequestMappingTemplateS3Location: mapping-templates/getContacts.request.txt
+      ResponseMappingTemplateS3Location: mapping-templates/getContacts.response.txt
+      ApiId: !GetAtt GraphQLApi.ApiId
+  MutationAddContactResolver:
+    Type: AWS::AppSync::Resolver
+    Properties:
+      TypeName: Mutation
+      FieldName: addContact
+      DataSourceName: !GetAtt ContactsTableDataSource.Name
+      RequestMappingTemplateS3Location: mapping-templates/addContact.request.txt
+      ResponseMappingTemplateS3Location: mapping-templates/addContact.response.txt
+      ApiId: !GetAtt GraphQLApi.ApiId
+  
 Outputs:
   GraphQLApiEndpoint:
     Description: AppSync GraphQL Endpoint
