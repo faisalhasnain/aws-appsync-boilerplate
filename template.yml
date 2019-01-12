@@ -14,6 +14,10 @@ Resources:
     Properties:
       Name: !Sub ${ApiName}-graphql-api
       AuthenticationType: API_KEY
+  ApiKey:
+    Type: AWS::AppSync::ApiKey
+    Properties:
+      ApiId: !GetAtt GraphQLApi.ApiId
   GraphQLSchema:
     Type: AWS::AppSync::GraphQLSchema
     Properties:
@@ -90,5 +94,8 @@ Resources:
 Outputs:
   GraphQLApiEndpoint:
     Description: AppSync GraphQL Endpoint
-    Value: GraphQLApi.GraphQLUrl
+    Value: !GetAtt GraphQLApi.GraphQLUrl
+  ApiKey:
+    Description: AppSync GraphQL API Key
+    Value: !GetAtt ApiKey.ApiKey
 
