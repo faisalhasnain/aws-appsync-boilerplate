@@ -78,8 +78,8 @@ Resources:
       TypeName: Query
       FieldName: getContacts
       DataSourceName: !GetAtt ContactsTableDataSource.Name
-      RequestMappingTemplateS3Location: mapping-templates/getContacts.request.txt
-      ResponseMappingTemplateS3Location: mapping-templates/getContacts.response.txt
+      RequestMappingTemplateS3Location: mapping-templates/getContacts.request.vm
+      ResponseMappingTemplateS3Location: mapping-templates/getContacts.response.vm
       ApiId: !GetAtt GraphQLApi.ApiId
   MutationAddContactResolver:
     Type: AWS::AppSync::Resolver
@@ -87,8 +87,8 @@ Resources:
       TypeName: Mutation
       FieldName: addContact
       DataSourceName: !GetAtt ContactsTableDataSource.Name
-      RequestMappingTemplateS3Location: mapping-templates/addContact.request.txt
-      ResponseMappingTemplateS3Location: mapping-templates/addContact.response.txt
+      RequestMappingTemplateS3Location: mapping-templates/addContact.request.vm
+      ResponseMappingTemplateS3Location: mapping-templates/addContact.response.vm
       ApiId: !GetAtt GraphQLApi.ApiId
   
 Outputs:
