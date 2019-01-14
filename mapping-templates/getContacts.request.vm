@@ -1,3 +1,4 @@
+## request mapping template for getContacts query which maps to Scan request for DynamoDB.
 {
   "version": "2017-02-28",
   "operation": "Scan"

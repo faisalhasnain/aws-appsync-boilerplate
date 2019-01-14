@@ -1,28 +1,35 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: Create AppSync API using DynamoDB Data sources  
+Description: Create AppSync GraphQL API using DynamoDB
 
 Parameters:
+
   ApiName:
     Type: String
     Description: Name of the API - used to generate unique names for resources
     MinLength: 3
     MaxLength: 25
     AllowedPattern: '^[a-zA-Z][a-zA-Z0-9\-]*$'
+
 Resources:
+
   GraphQLApi:
     Type: AWS::AppSync::GraphQLApi
     Properties:
       Name: !Sub ${ApiName}-graphql-api
       AuthenticationType: API_KEY
+
   ApiKey:
     Type: AWS::AppSync::ApiKey
     Properties:
       ApiId: !GetAtt GraphQLApi.ApiId
+
   GraphQLSchema:
     Type: AWS::AppSync::GraphQLSchema
     Properties:
       ApiId: !GetAtt GraphQLApi.ApiId
+      # path to graphql schema file
       DefinitionS3Location: schema.graphql
+
   ContactsTable:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -34,6 +41,7 @@ Resources:
       - AttributeName: username
         AttributeType: S
       BillingMode: PAY_PER_REQUEST
+
   ApiRole:
     Type: AWS::IAM::Role
     Properties:
@@ -62,6 +70,7 @@ Resources:
             - dynamodb:BatchGetItem
             - dynamodb:BatchWriteItem
             Resource: !GetAtt ContactsTable.Arn
+
   ContactsTableDataSource:
     Type: AWS::AppSync::DataSource
     Properties:
@@ -72,30 +81,37 @@ Resources:
         AwsRegion: !Ref AWS::Region
         TableName: !Ref ContactsTable
       ApiId: !GetAtt GraphQLApi.ApiId
+
   QueryGetContactsResolver:
     Type: AWS::AppSync::Resolver
     Properties:
       TypeName: Query
       FieldName: getContacts
       DataSourceName: !GetAtt ContactsTableDataSource.Name
+      # path to request mapping template file for getContacts
       RequestMappingTemplateS3Location: mapping-templates/getContacts.request.vm
+      # path to response mapping template file for getContacts
       ResponseMappingTemplateS3Location: mapping-templates/getContacts.response.vm
       ApiId: !GetAtt GraphQLApi.ApiId
+
   MutationAddContactResolver:
     Type: AWS::AppSync::Resolver
     Properties:
       TypeName: Mutation
       FieldName: addContact
       DataSourceName: !GetAtt ContactsTableDataSource.Name
+      # path to request mapping template file for addContact
       RequestMappingTemplateS3Location: mapping-templates/addContact.request.vm
+      # path to response mapping template file for addContact
       ResponseMappingTemplateS3Location: mapping-templates/addContact.response.vm
       ApiId: !GetAtt GraphQLApi.ApiId
   
 Outputs:
-  GraphQLApiEndpoint:
-    Description: AppSync GraphQL Endpoint
-    Value: !GetAtt GraphQLApi.GraphQLUrl
-  ApiKey:
-    Description: AppSync GraphQL API Key
-    Value: !GetAtt ApiKey.ApiKey
 
+  GraphQLApiEndpoint:
+    Description: GraphQL API URL
+    Value: !GetAtt GraphQLApi.GraphQLUrl
+
+  ApiKey:
+    Description: API Key
+    Value: !GetAtt ApiKey.ApiKey

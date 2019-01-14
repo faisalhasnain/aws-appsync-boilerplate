@@ -1,1 +1,2 @@
+## response mapping template for addContact mutation which returns newly added contact object.
 $util.toJson($ctx.result)

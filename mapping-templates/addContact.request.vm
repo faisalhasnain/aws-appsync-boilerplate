@@ -1,3 +1,4 @@
+## request mapping template for addContact mutation which maps to PutItem request for DynamoDB.
 {
   "version": "2017-02-28",
   "operation": "PutItem",

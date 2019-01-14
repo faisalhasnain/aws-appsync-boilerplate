@@ -1,1 +1,2 @@
+## response mapping template for getContacts query which returns all contacts.
 $util.toJson($ctx.result.items)
